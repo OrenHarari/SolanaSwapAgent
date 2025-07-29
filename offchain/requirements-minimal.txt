@@ -1,0 +1,8 @@
+# Minimal requirements for testing
+requests==2.31.0
+python-dotenv==1.0.0
+structlog
+aiohttp==3.9.1
+base58==2.1.1
+pydantic==2.5.2
+pydantic-settings==2.1.0

@@ -1,6 +1,6 @@
 # Solana dependencies
 solders==0.18.1
-solana==0.32.1
+solana==0.36.7
 anchorpy==0.19.1
 
 # Jupiter API
@@ -16,7 +16,6 @@ redis==5.0.1
 aioredis==2.0.1
 
 # Async and concurrency
-asyncio==3.4.3
 aiofiles==23.2.1
 
 # Math and calculations
@@ -40,3 +39,6 @@ pytest-asyncio==0.21.1
 black==23.11.0
 isort==5.13.2
 mypy==1.7.1
+
+# Additional crypto libraries
+base58==2.1.1
