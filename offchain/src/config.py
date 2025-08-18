@@ -2,12 +2,18 @@
 
 import os
 from typing import List, Optional
-from pydantic_settings import BaseSettings
-from pydantic import Field, validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field, field_validator
 
 
 class Settings(BaseSettings):
     """Application settings."""
+    # Pydantic v2 settings configuration
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+    )
     
     # Solana RPC Configuration
     solana_rpc_url: str = Field(
@@ -33,7 +39,7 @@ class Settings(BaseSettings):
     # Trading parameters
     min_profit_threshold: float = Field(
         default=0.01,
-        description="Minimum profit threshold in SOL"
+        description="Minimum profit threshold as a percentage (%)"
     )
     max_slippage_bps: int = Field(
         default=50,
@@ -100,30 +106,27 @@ class Settings(BaseSettings):
         description="Jito tip amount in SOL"
     )
     
-    @validator('wallet_private_key')
+    @field_validator('wallet_private_key')
     def validate_private_key(cls, v):
         """Validate private key format."""
         if not v:
             raise ValueError("Wallet private key is required")
         return v
     
-    @validator('min_profit_threshold')
+    @field_validator('min_profit_threshold')
     def validate_profit_threshold(cls, v):
         """Validate profit threshold is positive."""
         if v <= 0:
             raise ValueError("Minimum profit threshold must be positive")
         return v
     
-    @validator('max_slippage_bps')
+    @field_validator('max_slippage_bps')
     def validate_slippage(cls, v):
         """Validate slippage is reasonable."""
         if v < 0 or v > 1000:  # 0-10%
             raise ValueError("Slippage must be between 0 and 1000 basis points")
         return v
     
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
 
 
 # Global settings instance

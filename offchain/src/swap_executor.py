@@ -17,6 +17,8 @@ from solana.rpc.types import TxOpts
 from anchorpy import Provider, Program, Context
 from anchorpy.error import ProgramError
 from spl.token.constants import TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID
+from spl.token.instructions import get_associated_token_address
+from solders.compute_budget import set_compute_unit_limit
 
 from .config import settings
 
@@ -450,14 +452,8 @@ class SwapExecutor:
             return None
     
     def _create_compute_budget_instruction(self, compute_units: int) -> Instruction:
-        """Create a compute budget instruction."""
-        # This would create an actual compute budget instruction
-        # For now, return a placeholder
-        return Instruction(
-            program_id=SYS_PROGRAM_ID,
-            accounts=[],
-            data=bytes()
-        )
+        """Create a compute budget instruction using ComputeBudget program."""
+        return set_compute_unit_limit(compute_units)
     
     def _get_swap_agent_pda(self) -> tuple[Pubkey, int]:
         """Get the swap agent program derived address."""
@@ -474,9 +470,9 @@ class SwapExecutor:
         owner: Pubkey
     ) -> Pubkey:
         """Get associated token account for a mint and owner."""
-        # This would use the actual ATA derivation
-        # For now, return a placeholder
-        return Pubkey.from_string("11111111111111111111111111111111")
+        mint = Pubkey.from_string(token_mint)
+        ata = get_associated_token_address(owner, mint)
+        return ata
     
     def _update_average_execution_time(self, execution_time: float):
         """Update the average execution time statistic."""

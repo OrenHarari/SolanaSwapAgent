@@ -13,6 +13,7 @@ from solders.pubkey import Pubkey
 from solana.rpc.async_api import AsyncClient
 from solana.rpc.commitment import Confirmed
 from anchorpy import Provider, Wallet
+import logging
 
 from .config import settings, DexConfig
 from .dex_clients import JupiterClient, RaydiumClient, PhoenixClient, MeteoraClient
@@ -378,6 +379,8 @@ async def main():
     import signal
     
     # Configure structured logging
+    level_name = settings.log_level.upper()
+    level = getattr(logging, level_name, logging.INFO)
     structlog.configure(
         processors=[
             structlog.processors.TimeStamper(fmt="ISO"),
@@ -389,9 +392,7 @@ async def main():
         ],
         context_class=dict,
         logger_factory=structlog.PrintLoggerFactory(),
-        wrapper_class=structlog.make_filtering_bound_logger(
-            getattr(structlog.stdlib, settings.log_level.upper())
-        ),
+        wrapper_class=structlog.make_filtering_bound_logger(level),
         cache_logger_on_first_use=True,
     )
     

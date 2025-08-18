@@ -1,6 +1,6 @@
 # Solana dependencies
-solders==0.18.1
-solana==0.32.1
+solders>=0.20.0,<0.21.0
+solana>=0.32.0,<0.33.0
 anchorpy==0.19.1
 
 # Jupiter API
@@ -16,7 +16,6 @@ redis==5.0.1
 aioredis==2.0.1
 
 # Async and concurrency
-asyncio==3.4.3
 aiofiles==23.2.1
 
 # Math and calculations
